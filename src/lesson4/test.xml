@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- login screen -->
+<edsscript>
+   <sequence name="start">
+      <action cmd="triggeron">
+         btn*
+      </action>
+      <action cmd="triggeron">
+         msg_generic
+      </action>
+      <action cmd="disablenbb">
+         all
+      </action>
+      <action cmd="setscrtext">
+         @@Sisteme Giriş@@
+      </action>
+      <action cmd="enablenbb">
+         forward,mainmenu
+      </action>
+      <action cmd="switchmsgtarget">
+         LOGIN_DLG
+      </action>
+      <action cmd="sendmsg">
+         start
+      </action>
+      <action cmd="jump">
+         step2
+      </action>
+   </sequence>
+   <sequence name="step2">
+      <action cmd="waittrigger">
+         btnforward
+      </action>
+      <action cmd="triggeron">
+         login*
+      </action>
+      <action cmd="disablenbb">
+         all
+      </action>
+      <action cmd="sendmsg">
+         check
+      </action>
+   </sequence>
+   <trigger name="login_succeded">
+      <condition type="appmsg">
+         login_succeeded
+      </condition>
+      <sequence>
+         <action cmd="endscript" />
+      </sequence>
+   </trigger>
+   <trigger name="login_unknownuser">
+      <condition type="appmsg">
+         login_unknownuser
+      </condition>
+      <sequence name="login_unknownuser">
+         <action cmd="disablenbb">
+            all
+         </action>
+         <action cmd="setscrtext">
+            @@Hata@@
+         </action>
+         <action cmd="showhtml">
+            generic_neg.htm,@@Yanlış kullanıcı ismi@@,@@Lütfen kullanıcı ismini doğru giriniz.@@
+         </action>
+         <action cmd="enablenbb">
+            back
+         </action>
+         <action cmd="waittrigger">
+            btnback
+         </action>
+         <action cmd="jump">
+            start
+         </action>
+      </sequence>
+   </trigger>
+   <trigger name="login_incorrectpwd">
+      <condition type="appmsg">
+         login_incorrectpwd
+      </condition>
+      <sequence name="login_incorrectpwd">
+         <action cmd="disablenbb">
+            all
+         </action>
+         <action cmd="setscrtext">
+            @@Hata@@
+         </action>
+         <action cmd="showhtml">
+            generic_neg.htm,@@Hatalı parola@@,@@Lütfen parolanızı doğru giriniz.@@
+         </action>
+         <action cmd="enablenbb">
+            back
+         </action>
+         <action cmd="waittrigger">
+            btnback
+         </action>
+         <action cmd="jump">
+             start
+         </action>
+      </sequence>
+   </trigger>
+   <!-- generic triggers -->
+   <trigger name="btnback">
+      <condition type="buttonclick">
+         back
+      </condition>
+      <sequence name="btnback">
+         <action cmd="triggeron">
+            btnback
+         </action>
+      </sequence>
+   </trigger>
+   <trigger name="btnforward">
+      <condition type="buttonclick">
+        forward
+      </condition>
+      <sequence name="btnforward">
+         <action cmd="triggeron">
+            btnforward
+         </action>
+      </sequence>
+      </trigger>
+      <trigger name="btnmainmenu">
+         <condition type="buttonclick">
+            mainmenu
+         </condition>
+         <sequence>
+           <action cmd="jumpscript">
+              <value label="mainmenuscript" scope="local" />
+           </action>
+           </sequence>
+        </trigger>
+        <trigger name="btnquitapp">
+           <condition type="buttonclick">
+              quitapplication
+           </condition>
+           <sequence name="btnquitapp">
+              <action cmd="callscript">
+                 quitapp.xml
+              </action>
+              <action cmd="jump">
+                 start
+              </action>
+           </sequence>
+        </trigger>
+        <trigger name="error_generic">
+           <condition type="appmsg">
+              error*
+           </condition>
+           <sequence>
+              <action cmd="showhtml">
+                 errdsc_null.htm,@@Hata@@
+              </action>
+              <action cmd="disablenbb">
+                 all
+              </action>
+              <action cmd="enablenbb">
+                 forward
+              </action>
+              <action cmd="waittrigger">
+                 btnforward
+              </action>
+              <action cmd="endscript" />
+           </sequence>
+        </trigger>
+        <trigger name="msg_generic">
+           <condition type="appmsg">
+              msg_generic
+           </condition>
+           <sequence>
+              <action cmd="showhtml">
+                 generic_msg.htm
+              </action>
+              <action cmd="triggeron">
+                 msg_generic
+              </action>
+           </sequence>
+        </trigger>
+        <!-- An unhandled exception is thrown from the hard code side. -->
+        <trigger name="error_hardcodeside">
+           <condition type="appmsg">
+              error_hardcodeside
+           </condition>
+           <sequence>
+              <action cmd="triggeroff">
+                 *
+              </action>
+              <action cmd="triggeron">
+                 btnmainmenu
+              </action>
+              <action cmd="triggeron">
+                 btnquitapp
+              </action>
+              <action cmd="disablenbb">
+                 all
+              </action>
+              <action cmd="enablenbb">
+                 mainmenu
+              </action>
+              <action cmd="showhtml">
+                 errdsc_null.htm,Hata, @@İşlem sırasında bir hata meydana geldi.@@
+              </action>
+              <action cmd="waittrigger">
+                 btnmainmenu
+              </action>
+           </sequence>
+        </trigger>
+</edsscript>
